@@ -61,6 +61,11 @@ else
         bookings = await client.GetFromJsonAsync<Booking[]>("api/booking");
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("setdates");
+    }
+
     async Task Delete(int Id)
     {
         var booking = bookings.First(x => x.ID == Id);
