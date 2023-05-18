@@ -1,0 +1,74 @@
+﻿<EditForm Model="@booking" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Name :</label>
+        <div>
+            <InputText @bind-Value="@booking.Name" />
+            <ValidationMessage For="@(() => booking.Name)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Date :</label>
+        <div>
+            <InputDate @bind-Value="@booking.Date" />
+            <ValidationMessage For="@(() => booking.Date)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Fexibility :</label>
+        <div>
+            <InputSelect @bind-Value="@booking.flexibilty">
+               <option value="">Select flexibility ...</option>
+                <option value="OneDay">One Day</option>
+                <option value="TwoDays">Two Days</option>
+                <option value="ThreeDays">Three Days</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => booking.flexibilty)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Vehicle Size :</label>
+        <div>
+            <InputSelect @bind-Value="@booking.VehicleSize">
+                <option value="">Select Vehicle Size ...</option>
+                <option value="Small" selected="selected">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+                <option value="Van">Van</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => booking.VehicleSize)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Email :</label>
+        <div>
+            <InputText @bind-Value="@booking.Email" />
+            <ValidationMessage For="@(() => booking.Email)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Phone Number :</label>
+        <div>
+            <InputText @bind-Value="@booking.Phone" />
+            <ValidationMessage For="@(() => booking.Phone)" />
+        </div>
+    </div>
+
+    <br/>
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code {
+    [Parameter] public Booking? booking { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    protected override void OnInitialized()
+    {
+        booking.Date = DateTime.Now;
+    }
+}

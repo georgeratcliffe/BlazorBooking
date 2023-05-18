@@ -1,0 +1,84 @@
+﻿@page "/bookings"
+@inject HttpClient client
+@inject IJSRuntime js
+@attribute [Authorize]
+
+<h3>Bookings</h3>
+@*<small>Add as many bookings as you wish.</small>
+<div class="form-group">
+    <a class="btn btn-success" href="bookings/create"><i class="oi oi-plus"></i> Create New</a>
+</div>*@
+<br>
+
+@if (bookings == null)
+{
+    <text>Loading...</text>
+}
+else if (bookings.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Flexibility</th>
+                <th>Vehicle Size</th>
+                <th>Number</th>
+                <th>Email</th>
+                <th>Approved</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Booking booking in bookings)
+            {
+                <tr>
+                    <td>@booking.ID</td>
+                    <td>@booking.Name</td>
+                    <td>@booking.Date</td>
+                    <td>@booking.flexibilty</td>
+                    <td>@booking.VehicleSize</td>
+                    <td>@booking.Phone</td>
+                    <td>@booking.Email</td>
+                    <td><input class="form-check-input" type="checkbox" @bind="@booking.Approved"/></td>
+                    <td>
+                        <a class="btn btn-success" href="bookings/edit/@booking.ID">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => Delete(booking.ID))">Delete</button>
+                        <button class="btn btn-success" @onclick="@(() => Approve(booking.ID))">Approve</button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+@code {
+    Booking[]? bookings { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        bookings = await client.GetFromJsonAsync<Booking[]>("api/booking");
+    }
+
+    async Task Delete(int Id)
+    {
+        var booking = bookings.First(x => x.ID == Id);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {booking.Name}'s Record?"))
+        {
+            await client.DeleteAsync($"api/booking/{Id}");
+            await OnInitializedAsync();
+        }
+    }
+
+    async Task Approve(int Id)
+    {
+        var booking = bookings.First(x => x.ID == Id);
+            booking.Approved = true;
+            await client.PutAsJsonAsync("api/booking", booking);
+            await OnInitializedAsync();
+    }
+}

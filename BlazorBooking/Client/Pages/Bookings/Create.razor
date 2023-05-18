@@ -1,0 +1,27 @@
+﻿@page "/Bookings/Create"
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager uriHelper
+@attribute [AllowAnonymous]
+@inject IJSRuntime js
+
+<h3>Create Booking</h3>
+
+<Form ButtonText="Create Booking" booking="@booking"
+            OnValidSubmit="@CreateBooking" />
+
+@code {
+    Booking booking = new Booking();
+    async Task CreateBooking()
+    {
+        try
+        {
+            var client = HttpClientFactory.CreateClient("BlazorApp.PublicServerAPI");
+            await client.PostAsJsonAsync("api/booking", booking);
+            await js.InvokeVoidAsync("alert", $"Created Successfully!");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
