@@ -2,10 +2,13 @@
 @inject HttpClient http
 @inject NavigationManager uriHelper
 @inject IJSRuntime js
+@attribute [Authorize]
 
 <h3>Edit Booking</h3>
+
 <Form ButtonText="Update" booking="booking"
       OnValidSubmit="@EditBooking" />
+
 @code {
     [Parameter] public int bookingId { get; set; }
     Booking booking = new Booking();

@@ -1,7 +1,6 @@
 ﻿using BlazorBooking.Server.Data;
 using BlazorBooking.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,7 @@ namespace BlazorBooking.Server.Controllers
         private readonly BookingDBContext _context;
         public BookingController(BookingDBContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         [HttpGet]
